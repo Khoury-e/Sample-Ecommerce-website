@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groomify</title>
+    <style>
+        @media  screen and (max-width: 500px) {
+            header {
+                font-size: small;    
+            }
+
+            nav input {
+                font-size: x-small;
+                width: 200px;
+            }
+
+            nav a {
+                font-size: small;
+                margin-left: 5px;
+            }
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            color: #fff;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            font-size: large;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #444;
+            padding: 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin: 0 20px;
+        }
+
+        nav input {
+            border: none;
+            border-radius: 20px;
+            padding: 11px;
+            margin: 0 10px;
+            font-size: medium;
+        }
+
+        nav input:hover {
+            border: 1px solid black;
+        }
+
+        nav a:hover {
+            border-bottom: 2px solid #fff;
+        }
+
+        section {
+            padding: 20px;
+            text-align: center;
+        }
+
+        #product {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .product-card {
+            border: 1px solid #555;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 20px;
+            background-color: #333;
+            width: 250px;
+        }
+
+        .product-image {
+            width: 100%;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .product-purchase
+        {
+            color: lightcoral ;
+            margin: 10px;
+        }
+
+        .redirect 
+        {
+            color: white;
+            font-family: 'Arial', sans-serif;
+            font-size: medium;
+            background-color: black;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome To Groomify</h1>
+    </header>
+    <nav>
+        <div class="search">
+            <input id="searchbar" type="text" placeholder="Search" onkeyup="search()">
+        </div>
+        <a href="signup.html">Create An Account</a>
+        <a href="signin.html">Log In</a>
+    </nav>
+    <section>
+        <h2>Groomify's Featured Products</h2>
+
+        <div id="product">
+            <div class="product-card">
+                <h3>Derma Roller</h3>
+                <p>Price: $10.99</p>
+            </div>
+            <div class="product-card"></div>
+            <div class="product-card"></div>
+        </div>
+    </section>
+    <script>
+       document.addEventListener("DOMContentLoaded", () => {
+            fetch("get_products.php")
+                .then(response => {
+                    if (!response.ok) {
+                        console.log(`${response.status}`);
+                    }
+
+                    return response.json();
+                })
+                .then(data => {
+                    const prod = document.getElementById("product");
+
+                    data.forEach(item => {
+                        var div = document.createElement("div");
+                        div.className = "product-card";
+
+                        let name = item["Name"];
+                        let image = item["Image"];
+                        let price = item["Price"];
+
+                        // you can add the image later on by providing a url
+                        div.innerHTML = "<h3>"+name+"</h3><p>Price: "+price+"</p><p class='product-purchase'>You Must Be Signed In To Purchase</p><button onclick='window.location.href=`signin.html`' class='redirect'>Log In</button>";
+                        prod.appendChild(div);
+                    })
+                })
+                .catch(error => console.error("Error Fetching Data ", error));
+       });
+
+        function search() {
+            var input = document.getElementById("searchbar");
+            var filter = input.value.toUpperCase();
+            var products = document.getElementsByClassName("product-card");
+
+            for (let i=0;i<products.length;i++) {
+                    let n = products[i].getElementsByTagName("h3")[0];
+                    var productVal = n.textContent || n.innerText;
+                    if (productVal.toUpperCase().indexOf(filter) > -1) {
+                        products[i].style.display = "";
+                    }
+                    else {
+                        products[i].style.display = "none";
+                    }
+            }
+        }
+    </script>
+</body>
+</html>

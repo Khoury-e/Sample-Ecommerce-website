@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groomify</title>
+</head>
+<style>
+    @media screen and (max-width: 500px) {        
+        form  label{
+            font-size: medium;
+        }
+
+        form input {
+            font-size: medium;
+        }
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #222;
+        height: 100vh;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    form {  
+        display: flex;
+        flex-direction: column;
+        width: 50vw;    
+        height: 80vh;
+        padding: 30px;  
+        background-color: white ;
+        color: #222;
+        border-radius: 20px;
+        font-size: x-large;
+    }
+
+    form label {
+        margin: 8px;
+        font-weight: bold;
+    }
+
+    form input {
+        padding: 8px;
+        margin: 15px;
+        border-radius: 10px;
+        width: 80%;
+        font-size: large;
+    }
+
+    #submit {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #submit button {
+        margin: 30px;
+        padding: 9px;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        background-color: black;
+        font-size: large;
+        font-weight: 750;
+    }
+</style>
+<body>
+    <form action="./create_acc.php" method="post" id="registrationForm">
+        <label for="name">Name</label>
+        <input id="name" type="text" name="name" placeholder="John Doe" autocomplete="off" required>
+
+        <label for="email">Email</label>
+        <input id="email" type="text"  name="email" autocomplete="off" placeholder="doe@example.com" required >
+
+        <label for="pass">Password</label>
+        <input id="pass" type="password" name="pass" required> 
+
+        <label for="confirm">Confirm Password</label>
+        <input id="confirm" type="password" name="confirm"  required>
+
+        <div id="submit">
+            <button type="submit" id="btn">Register Now!</button>
+        </div>
+    </form>
+    <script>
+        var btn = document.getElementById("btn");
+        btn.addEventListener("click", () =>{ 
+            const formData = new FormData(document.getElementById('registrationForm'));
+            fetch('create_acc.php', {
+                method: "POST",
+                body: formData
+            }).then(response => response.json())
+            .then(data => {
+                if(data.status != "success") {
+                    alert(data.status);
+                }
+            }).catch(error => console.error("Error: ", error));
+        });
+    </script>
+</body>
+</html>

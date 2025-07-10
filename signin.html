@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groomify</title>
+</head>
+<style>
+    @media  screen and (max-width: 500px) {
+        form {
+            width: 80vw;
+        }
+    }
+    @media screen and (min-width: 501px) {
+        form {
+            width: 50vw;
+        }
+    }
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background-color: #222;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    form {  
+        display: flex;
+        flex-direction: column; 
+        height: 35vh;
+        padding: 30px;  
+        background-color: white ;
+        color: #222;
+        border-radius: 20px;
+        font-size: x-large;
+    }
+
+    form label {
+        margin: 10px;
+        font-weight: bold;
+    }
+
+    form input {
+        padding: 8px;
+        border-radius: 10px;
+        width: 80%;
+        font-size: large;
+    }   
+
+    #submit {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #submit button {
+        margin: 30px;
+        padding: 9px;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        background-color: black;
+        font-size: large;
+        font-weight: 750;
+    }
+</style>
+<body>
+    <form id="authForm" method="post" action="./authenticate.php">
+        <label for="email">Email</label>
+        <input id="email" type="text" name="email" autocomplete="off" required>
+        
+        <label for="pass">Password</label>
+        <input id="pass" name="pass" type="password" required>
+
+        <div id="submit">
+            <button type="submit">Sign In</button>
+        </div>
+    </form>
+    <script type="text/javascript">
+       document.getElementById('authForm').addEventListener('submit', function (event) {
+            event.preventDefault(); 
+            fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === "ok") {
+                   window.location.href = "products.php";
+                } else if(data.status === "error" || data.status === "NotAUser"){
+                    alert('Invalid Email Or Password');
+                } 
+            }).catch(error => {
+                alert(error);
+            });
+        });
+    </script>
+</body>
+</html>
